@@ -5,9 +5,6 @@
             <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Page Builder</h1>
             <p class="text-neutral-400 mt-1">Manage SismulThemes homepage content and digital assets.</p>
         </div>
-        <button class="px-8 py-3 bg-white text-black text-sm font-bold rounded-full hover:bg-neutral-200 transition-colors shadow-lg">
-            Save All Changes
-        </button>
     </div>
 
     <div class="bg-darkCard border border-darkBorder rounded-[2.5rem] p-8 shadow-2xl">
@@ -156,33 +153,33 @@
 </div>
 
 <?php
-$this->load->view('components/modal_base', [
-    'modal_id' => 'modalEditHero',
-    'modal_title' => 'Replace Image Slot',
-    'form_action' => base_url('admin/update_hero'),
-    'modal_content' => $this->load->view('admin/forms/form_hero', '', TRUE)
-]);
+	$this->load->view('components/modal_base', [
+		'modal_id' => 'modalEditHero',
+		'modal_title' => 'Replace Image Slot',
+		'form_action' => base_url('admin/update_hero'),
+		'modal_content' => $this->load->view('admin/forms/form_hero', '', TRUE)
+	]);
 
-$this->load->view('components/modal_base', [
-    'modal_id' => 'modalEditFeature',
-    'modal_title' => 'Update Feature Card',
-    'form_action' => base_url('admin/update_feature'),
-    'modal_content' => $this->load->view('admin/forms/form_feature', '', TRUE)
-]);
+	$this->load->view('components/modal_base', [
+		'modal_id' => 'modalEditFeature',
+		'modal_title' => 'Update Feature Card',
+		'form_action' => base_url('admin/update_feature'),
+		'modal_content' => $this->load->view('admin/forms/form_feature', '', TRUE)
+	]);
 
-$this->load->view('components/modal_base', [
-    'modal_id' => 'modalEditBanner',
-    'modal_title' => 'Edit Promotional Banner',
-    'form_action' => base_url('admin/update_banner'),
-    'modal_content' => $this->load->view('admin/forms/form_banner', '', TRUE)
-]);
+	$this->load->view('components/modal_base', [
+		'modal_id' => 'modalEditBanner',
+		'modal_title' => 'Edit Promotional Banner',
+		'form_action' => base_url('admin/update_banner'),
+		'modal_content' => $this->load->view('admin/forms/form_banner', '', TRUE)
+	]);
 
-$this->load->view('components/modal_base', [
-    'modal_id' => 'modalAddZigzag',
-    'modal_title' => 'Surprise Row Manager',
-    'form_action' => base_url('admin/save_zigzag'),
-    'modal_content' => $this->load->view('admin/forms/form_zigzag', '', TRUE)
-]);
+	$this->load->view('components/modal_base', [
+		'modal_id' => 'modalAddZigzag',
+		'modal_title' => 'Surprise Row Manager',
+		'form_action' => base_url('admin/save_zigzag'),
+		'modal_content' => $this->load->view('admin/forms/form_zigzag', '', TRUE)
+	]);
 ?>
 
 <script>

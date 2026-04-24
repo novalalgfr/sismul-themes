@@ -126,4 +126,52 @@ class Admin extends CI_Controller {
         $this->session->set_flashdata('success', 'Promotional Banner successfully updated!');
         redirect('admin');
     }
+
+	public function save_zigzag() {
+        $id = $this->input->post('zigzag_id');
+        
+        $data_save = [
+            'title'       => $this->input->post('title'),
+            'description' => $this->input->post('description')
+        ];
+
+        // Cek apakah ada file gambar yang diupload
+        if (!empty($_FILES['zigzag_image']['name'])) {
+            $config['upload_path']   = './assets/uploads/';
+            $config['allowed_types'] = 'jpg|jpeg|png|webp|gif';
+            $config['max_size']      = 2048;
+            $config['file_name']     = 'zigzag_' . time();
+
+            $this->upload->initialize($config);
+
+            if ($this->upload->do_upload('zigzag_image')) {
+                $data_save['image_file'] = $this->upload->data('file_name');
+            } else {
+                $this->session->set_flashdata('error', $this->upload->display_errors('',''));
+                redirect('admin');
+            }
+        }
+
+        // LOGIKA PENENTU: Insert atau Update?
+        if (!empty($id)) {
+            // Jika ID terisi, berarti UPDATE data lama
+            $this->M_CMS->update_zigzag($id, $data_save);
+            $this->session->set_flashdata('success', 'Zig-Zag Row successfully updated!');
+        } else {
+            // Jika ID kosong, berarti INSERT baris baru
+            $this->M_CMS->insert_zigzag($data_save);
+            $this->session->set_flashdata('success', 'New Zig-Zag Row successfully added!');
+        }
+
+        redirect('admin');
+    }
+
+    // ==========================================
+    // PROSES DELETE ZIG-ZAG
+    // ==========================================
+    public function delete_zigzag($id) {
+        $this->M_CMS->delete_zigzag($id);
+        $this->session->set_flashdata('success', 'Zig-Zag Row successfully deleted!');
+        redirect('admin');
+    }
 }
