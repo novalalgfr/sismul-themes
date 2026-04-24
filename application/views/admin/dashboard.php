@@ -105,28 +105,21 @@
                 <h2 class="text-2xl font-bold text-white">3. Zig-Zag Surprises</h2>
                 <p class="text-sm text-neutral-500 mt-1">Fully manage rows with alternating image positions.</p>
             </div>
-            <button onclick="openModal('modalAddZigzag')" class="px-6 py-3 bg-white text-black text-sm font-bold rounded-full hover:bg-neutral-200 transition-colors flex items-center gap-2">
+            <button onclick="addZigzag()" class="px-6 py-3 bg-white text-black text-sm font-bold rounded-full hover:bg-neutral-200 transition-colors flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
                 Add New Row
             </button>
         </div>
 
         <div class="space-y-5">
-            <?php 
-            $rows = [
-                ['id' => 1, 'title' => '3 Headers and Footers'],
-                ['id' => 2, 'title' => '3 Notification Bars'],
-                ['id' => 3, 'title' => 'Unique Custom Animations']
-            ];
-            
-            foreach ($rows as $index => $row): 
+            <?php foreach ($zigzags as $index => $row): 
                 $position = ($index % 2 == 0) ? 'Right' : 'Left';
             ?>
             
             <div class="bg-[#0f0f0f] border border-darkBorder rounded-2xl p-5 flex flex-col md:flex-row gap-6 items-center justify-between group hover:border-neutral-600 transition-all">
                 <div class="flex items-center gap-5 w-full md:w-auto">
                     <div class="w-28 h-20 rounded-xl bg-black overflow-hidden border border-darkBorder shrink-0 relative">
-                        <img src="https://placehold.co/400x300/151515/333333?text=Row+<?= $index+1 ?>" class="w-full h-full object-cover">
+                        <img src="<?= base_url('assets/uploads/' . $row['image_file']) ?>" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h3 class="text-white font-bold text-base mb-1.5"><?= $row['title'] ?></h3>
@@ -139,10 +132,10 @@
                 </div>
 
                 <div class="flex items-center gap-3 w-full md:w-auto justify-end">
-                    <button onclick="openModal('modalAddZigzag')" class="px-5 py-2 text-xs font-bold bg-[#1a1a1a] hover:bg-neutral-800 text-white rounded-xl border border-darkBorder transition-colors">
+                    <button onclick="editZigzag(<?= $row['id'] ?>, '<?= addslashes($row['title']) ?>', '<?= addslashes($row['description']) ?>')" class="px-5 py-2 text-xs font-bold bg-[#1a1a1a] hover:bg-neutral-800 text-white rounded-xl border border-darkBorder transition-colors">
                         Edit
                     </button>
-                    <button class="p-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl border border-red-500/20 transition-colors">
+                    <button onclick="confirmDelete('<?= base_url('admin/delete_zigzag/'.$row['id']) ?>')" class="p-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl border border-red-500/20 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                 </div>
@@ -150,6 +143,31 @@
             <?php endforeach; ?>
         </div>
     </div>
+
+	<div id="modalDeleteConfirm" class="fixed inset-0 z-[100] hidden">
+		<div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeModal('modalDeleteConfirm')"></div>
+		<div class="flex items-center justify-center min-h-screen px-4 text-center">
+			<div class="relative bg-darkCard border border-darkBorder rounded-[2rem] p-8 text-center shadow-2xl w-full max-w-sm transform transition-all">
+				<div class="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-5 border border-red-500/20">
+					<svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+				</div>
+				
+				<h3 class="text-2xl font-bold text-white mb-2">Are you sure?</h3>
+				<p class="text-sm text-neutral-400 mb-8 leading-relaxed">
+					You are about to delete this item. This action cannot be undone and will permanently remove it from the homepage.
+				</p>
+				
+				<div class="flex flex-col gap-3">
+					<a id="btnConfirmDelete" href="#" class="w-full py-3.5 bg-red-500 text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20">
+						Yes, Delete It
+					</a>
+					<button onclick="closeModal('modalDeleteConfirm')" class="w-full py-3.5 bg-transparent text-neutral-400 hover:text-white text-sm font-bold rounded-xl transition-colors">
+						Cancel
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php
@@ -226,5 +244,39 @@
         document.getElementById('input_banner_desc').value = currentDesc;
         document.getElementById('input_banner_btn').value = currentBtn;
         openModal('modalEditBanner');
+    }
+
+	// FUNGSI UNTUK MENAMBAH BARIS BARU (Form dikosongkan)
+    function addZigzag() {
+        document.getElementById('zigzag_id').value = ''; // ID kosong = Insert
+        document.getElementById('zigzag_title').value = '';
+        document.getElementById('zigzag_desc').value = '';
+        
+        // Opsional: Ganti Judul Modal biar relevan
+        const modalTitle = document.querySelector('#modalAddZigzag h3');
+        if(modalTitle) modalTitle.innerText = 'Add New Surprise Row';
+        
+        openModal('modalAddZigzag');
+    }
+
+    // FUNGSI UNTUK MENGEDIT BARIS LAMA (Form diisi data lama)
+    function editZigzag(id, title, desc) {
+        document.getElementById('zigzag_id').value = id; // ID terisi = Update
+        document.getElementById('zigzag_title').value = title;
+        document.getElementById('zigzag_desc').value = desc;
+        
+        // Opsional: Ganti Judul Modal biar relevan
+        const modalTitle = document.querySelector('#modalAddZigzag h3');
+        if(modalTitle) modalTitle.innerText = 'Edit Surprise Row';
+        
+        openModal('modalAddZigzag');
+    }
+
+	function confirmDelete(deleteUrl) {
+        // Ganti href dari tombol "Yes, Delete It" dengan URL delete dari baris yang diklik
+        document.getElementById('btnConfirmDelete').href = deleteUrl;
+        
+        // Buka modalnya
+        openModal('modalDeleteConfirm');
     }
 </script>
