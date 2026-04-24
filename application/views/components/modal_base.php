@@ -14,6 +14,19 @@
             <form action="<?= $form_action ?? '#' ?>" method="POST" enctype="multipart/form-data">
                 <div class="px-6 py-6">
                     <?= $modal_content ?>
+
+                    <div id="preview-container-<?= $modal_id ?>" class="hidden mt-4">
+                        <p class="text-xs text-neutral-500 mb-2 font-medium uppercase tracking-wider">Preview</p>
+                        <div class="relative w-full rounded-xl overflow-hidden border border-darkBorder bg-[#0f0f0f] flex items-center justify-center" style="min-height: 180px;">
+                            <img 
+                                id="preview-image-<?= $modal_id ?>" 
+                                src="#" 
+                                alt="Preview" 
+                                class="max-h-56 w-auto object-contain rounded-xl transition-all duration-300"
+                            >
+                        </div>
+                    </div>
+
                 </div>
                 
                 <div class="px-6 py-4 border-t border-darkBorder bg-[#0f0f0f] flex justify-end space-x-3">
@@ -29,3 +42,65 @@
         </div>
     </div>
 </div>
+
+<script>
+(function() {
+    const modalId    = '<?= $modal_id ?>';
+    const container  = document.getElementById('preview-container-' + modalId);
+    const previewImg = document.getElementById('preview-image-' + modalId);
+    const modal      = document.getElementById(modalId);
+
+    function bindFileInputs() {
+        const fileInputs = modal.querySelectorAll('input[type="file"]');
+
+        fileInputs.forEach(function(input) {
+            if (input.dataset.previewBound) return;
+            input.dataset.previewBound = 'true';
+
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+
+                if (!file) {
+                    container.classList.add('hidden');
+                    previewImg.src = '#';
+                    return;
+                }
+
+                if (!file.type.startsWith('image/')) {
+                    container.classList.add('hidden');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    previewImg.src = ev.target.result;
+                    container.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindFileInputs);
+    } else {
+        bindFileInputs();
+    }
+
+    const originalClose = window.closeModal;
+    window.closeModal = function(id) {
+        if (id === modalId) {
+            container.classList.add('hidden');
+            previewImg.src = '#';
+
+            modal.querySelectorAll('input[type="file"]').forEach(function(input) {
+                input.value = '';
+                delete input.dataset.previewBound;
+            });
+
+            setTimeout(bindFileInputs, 100);
+        }
+        if (typeof originalClose === 'function') originalClose(id);
+    };
+})();
+</script>

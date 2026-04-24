@@ -230,14 +230,12 @@
         openModal('modalEditHero');
     }
 
-	// Fungsi untuk membuka modal Edit Feature dan mengisi teks bawaannya
     function editFeature(id, currentTitle) {
         document.getElementById('input_feature_id').value = id;
         document.getElementById('input_feature_title').value = currentTitle;
         openModal('modalEditFeature');
     }
 
-    // Fungsi untuk membuka modal Edit Banner dan mengisi teks bawaannya
     function editBanner(id, currentTitle, currentDesc, currentBtn) {
         document.getElementById('input_banner_id').value = id;
         document.getElementById('input_banner_title').value = currentTitle;
@@ -246,26 +244,22 @@
         openModal('modalEditBanner');
     }
 
-	// FUNGSI UNTUK MENAMBAH BARIS BARU (Form dikosongkan)
     function addZigzag() {
-        document.getElementById('zigzag_id').value = ''; // ID kosong = Insert
+        document.getElementById('zigzag_id').value = ''; 
         document.getElementById('zigzag_title').value = '';
         document.getElementById('zigzag_desc').value = '';
         
-        // Opsional: Ganti Judul Modal biar relevan
         const modalTitle = document.querySelector('#modalAddZigzag h3');
         if(modalTitle) modalTitle.innerText = 'Add New Surprise Row';
         
         openModal('modalAddZigzag');
     }
 
-    // FUNGSI UNTUK MENGEDIT BARIS LAMA (Form diisi data lama)
     function editZigzag(id, title, desc) {
-        document.getElementById('zigzag_id').value = id; // ID terisi = Update
+        document.getElementById('zigzag_id').value = id;
         document.getElementById('zigzag_title').value = title;
         document.getElementById('zigzag_desc').value = desc;
         
-        // Opsional: Ganti Judul Modal biar relevan
         const modalTitle = document.querySelector('#modalAddZigzag h3');
         if(modalTitle) modalTitle.innerText = 'Edit Surprise Row';
         
@@ -273,10 +267,8 @@
     }
 
 	function confirmDelete(deleteUrl) {
-        // Ganti href dari tombol "Yes, Delete It" dengan URL delete dari baris yang diklik
         document.getElementById('btnConfirmDelete').href = deleteUrl;
         
-        // Buka modalnya
         openModal('modalDeleteConfirm');
     }
 </script>
