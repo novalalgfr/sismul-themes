@@ -20,82 +20,87 @@
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-            <?php for ($i = 1; $i <= 9; $i++): ?>
+            <?php foreach ($hero_images as $index => $hero): ?>
             <div class="bg-[#0f0f0f] border border-darkBorder rounded-2xl overflow-hidden group relative">
                 <div class="aspect-[4/3] bg-black relative">
-                    <img src="https://placehold.co/400x300/151515/333333?text=Slot+<?= $i ?>" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                    <img src="<?= base_url('assets/uploads/' . $hero['image_file']) ?>" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                        <button onclick="openModal('modalEditHero')" class="px-4 py-2 bg-white text-black text-xs font-bold rounded-full hover:scale-105 transition-transform">
+                        <button onclick="editHeroSlot(<?= $hero['slot_number'] ?>)" class="px-4 py-2 bg-white text-black text-xs font-bold rounded-full hover:scale-105 transition-transform">
                             Replace
                         </button>
                     </div>
                 </div>
                 <div class="p-3 text-center">
-                    <p class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Image Slot <?= $i ?></p>
+                    <p class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Image Slot <?= $hero['slot_number'] ?></p>
                 </div>
             </div>
-            <?php endfor; ?>
+            <?php endforeach; ?>
         </div>
     </div>
 
     <div class="bg-darkCard border border-darkBorder rounded-[2.5rem] p-8 shadow-2xl">
-        <div class="mb-8 border-b border-darkBorder pb-5">
-            <h2 class="text-2xl font-bold text-white">2. Features & Promotional Banner</h2>
-            <p class="text-sm text-neutral-500 mt-1">Update feature cards and the wide Figma call-to-action banner.</p>
-        </div>
+		<div class="mb-8 border-b border-darkBorder pb-5">
+			<h2 class="text-2xl font-bold text-white">2. Features & Promotional Banner</h2>
+			<p class="text-sm text-neutral-500 mt-1">Update feature cards and the wide Figma call-to-action banner.</p>
+		</div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <?php 
-            $features = ['20+ Pages', '35+ Sections', '25+ Styles & Symbols'];
-            foreach ($features as $index => $title): 
-            ?>
-            <div class="bg-[#0f0f0f] border border-darkBorder rounded-[2rem] p-5 flex flex-col group">
-                <div class="aspect-video rounded-2xl bg-black relative overflow-hidden mb-5 border border-darkBorder">
-                    <img src="https://placehold.co/600x400/151515/333333?text=Feature+<?= $index+1 ?>" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                    <button onclick="openModal('modalEditFeature')" class="absolute top-3 right-3 p-2.5 bg-black/80 rounded-xl text-white hover:bg-white hover:text-black transition-all backdrop-blur-md border border-darkBorder">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                    </button>
-                </div>
-                <div class="bg-[#1a1a1a] rounded-xl p-4 border border-darkBorder flex justify-between items-center group-hover:border-neutral-500 transition-colors cursor-pointer" onclick="openModal('modalEditFeature')">
-                    <span class="text-white font-bold text-sm tracking-wide"><?= $title ?></span>
-                    <svg class="w-4 h-4 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </div>
-            </div>
-            <?php endforeach; ?>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+			
+			<?php foreach ($features as $f): ?>
+			<div class="bg-[#0f0f0f] border border-darkBorder rounded-[2rem] p-5 flex flex-col group">
+				<div class="aspect-video rounded-2xl bg-black relative overflow-hidden mb-5 border border-darkBorder">
+					<img src="<?= base_url('assets/uploads/' . $f['image_file']) ?>" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+					
+					<button onclick="editFeature(<?= $f['id'] ?>, '<?= addslashes($f['title']) ?>')" class="absolute top-3 right-3 p-2.5 bg-black/80 rounded-xl text-white hover:bg-white hover:text-black transition-all backdrop-blur-md border border-darkBorder">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+					</button>
+				</div>
+				
+				<div class="bg-[#1a1a1a] rounded-xl p-4 border border-darkBorder flex justify-between items-center group-hover:border-neutral-500 transition-colors cursor-pointer" onclick="editFeature(<?= $f['id'] ?>, '<?= addslashes($f['title']) ?>')">
+					<span class="text-white font-bold text-sm tracking-wide"><?= $f['title'] ?></span>
+					<svg class="w-4 h-4 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+				</div>
+			</div>
+			<?php endforeach; ?>
 
-            <div class="md:col-span-3 bg-[#0f0f0f] border border-darkBorder rounded-[2rem] p-5 md:p-8 flex flex-col md:flex-row gap-8 items-center group mt-2">
-                <div class="w-full md:w-2/5 aspect-video rounded-[1.5rem] bg-black relative overflow-hidden border border-darkBorder shrink-0">
-                    <img src="https://placehold.co/800x600/1a1a1a/333333?text=Figma+Banner+Preview" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                        <button onclick="openModal('modalEditBanner')" class="px-5 py-2.5 bg-white text-black text-xs font-bold rounded-full hover:scale-105 transition-transform">Replace Banner Image</button>
-                    </div>
-                </div>
-                
-                <div class="w-full md:w-3/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-2">
-                            <span class="px-3 py-1 bg-darkBg text-neutral-500 text-[10px] font-black uppercase rounded-md border border-darkBorder tracking-[0.2em]">Promo Banner</span>
-                        </div>
-                        <h3 class="text-white font-bold text-2xl tracking-tight">Figma file included</h3>
-                        <p class="text-sm text-neutral-500 leading-relaxed max-w-md">Edit the title, description, and button text for the horizontal promotional section.</p>
-                        
-                        <div class="flex flex-wrap gap-3 mt-4">
-                            <div class="flex items-center gap-2 text-xs font-bold text-neutral-400 bg-darkBg px-3 py-2 rounded-xl border border-darkBorder">
-                                <div class="w-2 h-2 rounded-full bg-green-500"></div> Icon Active
-                            </div>
-                            <div class="flex items-center gap-2 text-xs font-bold text-neutral-400 bg-darkBg px-3 py-2 rounded-xl border border-darkBorder">
-                                <div class="w-2 h-2 rounded-full bg-blue-500"></div> Request Figma file
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button onclick="openModal('modalEditBanner')" class="px-6 py-3 bg-[#1a1a1a] hover:bg-neutral-800 text-white text-xs font-bold rounded-full border border-darkBorder transition-all whitespace-nowrap">
-                        Edit Content
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+			<div class="md:col-span-3 bg-[#0f0f0f] border border-darkBorder rounded-[2rem] p-5 md:p-8 flex flex-col md:flex-row gap-8 items-center group mt-2">
+				
+				<div class="w-full md:w-2/5 aspect-video rounded-[1.5rem] bg-black relative overflow-hidden border border-darkBorder shrink-0">
+					<img src="<?= base_url('assets/uploads/' . $banner['image_file']) ?>" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+					<div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+						<button onclick="editBanner(<?= $banner['id'] ?>, '<?= addslashes($banner['title']) ?>', '<?= addslashes($banner['description']) ?>', '<?= addslashes($banner['button_text']) ?>')" class="px-5 py-2.5 bg-white text-black text-xs font-bold rounded-full hover:scale-105 transition-transform">
+							Replace Banner Image
+						</button>
+					</div>
+				</div>
+				
+				<div class="w-full md:w-3/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+					<div class="space-y-4">
+						<div class="flex items-center gap-2">
+							<span class="px-3 py-1 bg-darkBg text-neutral-500 text-[10px] font-black uppercase rounded-md border border-darkBorder tracking-[0.2em]">Promo Banner</span>
+						</div>
+						
+						<h3 class="text-white font-bold text-2xl tracking-tight"><?= $banner['title'] ?></h3>
+						<p class="text-sm text-neutral-500 leading-relaxed max-w-md"><?= $banner['description'] ?></p>
+						
+						<div class="flex flex-wrap gap-3 mt-4">
+							<div class="flex items-center gap-2 text-xs font-bold text-neutral-400 bg-darkBg px-3 py-2 rounded-xl border border-darkBorder">
+								<div class="w-2 h-2 rounded-full bg-green-500"></div> Icon Active
+							</div>
+							<div class="flex items-center gap-2 text-xs font-bold text-neutral-400 bg-darkBg px-3 py-2 rounded-xl border border-darkBorder">
+								<div class="w-2 h-2 rounded-full bg-blue-500"></div> <?= $banner['button_text'] ?>
+							</div>
+						</div>
+					</div>
+					
+					<button onclick="editBanner(<?= $banner['id'] ?>, '<?= addslashes($banner['title']) ?>', '<?= addslashes($banner['description']) ?>', '<?= addslashes($banner['button_text']) ?>')" class="px-6 py-3 bg-[#1a1a1a] hover:bg-neutral-800 text-white text-xs font-bold rounded-full border border-darkBorder transition-all whitespace-nowrap">
+						Edit Content
+					</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
 
     <div class="bg-darkCard border border-darkBorder rounded-[2.5rem] p-8 shadow-2xl">
         <div class="mb-8 flex justify-between items-end border-b border-darkBorder pb-5">
@@ -203,4 +208,26 @@ $this->load->view('components/modal_base', [
             modals.forEach(modal => closeModal(modal.id));
         }
     });
+
+	function editHeroSlot(slotNumber) {
+        document.getElementById('input_hero_slot').value = slotNumber;
+        document.getElementById('display_hero_slot').innerText = slotNumber;
+        openModal('modalEditHero');
+    }
+
+	// Fungsi untuk membuka modal Edit Feature dan mengisi teks bawaannya
+    function editFeature(id, currentTitle) {
+        document.getElementById('input_feature_id').value = id;
+        document.getElementById('input_feature_title').value = currentTitle;
+        openModal('modalEditFeature');
+    }
+
+    // Fungsi untuk membuka modal Edit Banner dan mengisi teks bawaannya
+    function editBanner(id, currentTitle, currentDesc, currentBtn) {
+        document.getElementById('input_banner_id').value = id;
+        document.getElementById('input_banner_title').value = currentTitle;
+        document.getElementById('input_banner_desc').value = currentDesc;
+        document.getElementById('input_banner_btn').value = currentBtn;
+        openModal('modalEditBanner');
+    }
 </script>

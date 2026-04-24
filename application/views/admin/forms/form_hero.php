@@ -1,6 +1,11 @@
 <div class="space-y-5">
+    
+    <input type="hidden" name="slot_number" id="input_hero_slot" value="">
+
     <div>
-        <label class="block text-sm font-bold text-neutral-300 mb-2">Upload New High-Res Image</label>
+        <label class="block text-sm font-bold text-neutral-300 mb-2">
+            Upload New Image for Slot <span id="display_hero_slot" class="text-white"></span>
+        </label>
         <div class="mt-1 flex justify-center px-6 pt-8 pb-8 border-2 border-darkBorder border-dashed rounded-xl hover:border-neutral-500 transition-colors bg-darkBg">
             <div class="space-y-2 text-center">
                 <svg class="mx-auto h-12 w-12 text-neutral-500" stroke="currentColor" fill="none" viewBox="0 0 48 48">
@@ -9,7 +14,7 @@
                 <div class="flex text-sm text-neutral-400 justify-center">
                     <label class="relative cursor-pointer rounded-md font-bold text-white hover:text-neutral-300">
                         <span>Browse files</span>
-                        <input type="file" class="sr-only" name="hero_image" accept="image/*">
+                        <input type="file" class="sr-only" name="hero_image" accept="image/*" required>
                     </label>
                     <p class="pl-1">or drag and drop</p>
                 </div>
