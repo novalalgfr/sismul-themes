@@ -3,7 +3,7 @@
             
             <div class="flex items-center gap-3 mb-4 md:mb-0">
                 <span class="text-white font-bold text-lg">SismulTheme</span>
-                <span class="text-neutral-500 text-sm border-l border-darkBorder pl-3 ml-1">
+                <span class="text-neutral-500 text-sm">
                     &copy; <?= date('Y') ?>
                 </span>
             </div>
